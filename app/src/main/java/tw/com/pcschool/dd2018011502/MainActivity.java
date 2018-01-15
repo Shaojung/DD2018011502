@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     InputStream inputStream = conn.getInputStream();
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     byte[] buf = new byte[1024];
-                    int totalLength = conn.getContentLength();
+                    final int totalLength = conn.getContentLength();
                     int sum = 0;
                     int length;
                     while ((length = inputStream.read(buf)) != -1)
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                tv.setText(String.valueOf(tmp));
+                                tv.setText(String.valueOf(tmp) + "/" + totalLength);
                             }
                         });
                     }
