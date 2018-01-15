@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,7 +24,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     ImageView img;
-    TextView tv;
+    TextView tv, tv2, tv3;
     ProgressBar pb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         img = (ImageView) findViewById(R.id.imageView);
         tv = (TextView) findViewById(R.id.textView);
+        tv2 = (TextView) findViewById(R.id.textView2);
+        tv3 = (TextView) findViewById(R.id.textView3);
         pb = (ProgressBar) findViewById(R.id.progressBar);
     }
     public void click1(View v)
@@ -90,13 +93,37 @@ public class MainActivity extends AppCompatActivity {
     }
     public void click2(View v)
     {
-
+        MyTask task = new MyTask();
+        task.execute(10);
     }
     class MyTask extends AsyncTask <Integer, Integer, String>
     {
         @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            tv3.setText(s);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            tv2.setText(String.valueOf(values[0]));
+        }
+
+        @Override
         protected String doInBackground(Integer... integers) {
-            return null;
+            int i;
+            for (i=0;i<=integers[0]; i++)
+            {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d("TASK", "doInBackground, i:" + i);
+                publishProgress(i);
+            }
+            return "okay";
         }
     }
 }
